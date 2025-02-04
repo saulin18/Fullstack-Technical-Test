@@ -10,13 +10,17 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
-
-
+import AuthLoader from "./components/containers/AuthLoader";
+import OfferDetailPage from "./pages/OfferDetailPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <AuthLoader>
+        <HomePage />,
+      </AuthLoader>
+    ),
   },
   {
     path: "auth/register",
@@ -30,6 +34,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardPage />,
   },
+  {
+    path: "offers/:id",
+    element: <OfferDetailPage />,
+  },
 ]);
 
 export const queryClient = new TanstackQueryClient();
@@ -39,4 +47,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
     </QueryClientProvider>
-  </React.StrictMode>);
+  </React.StrictMode>
+);

@@ -17,11 +17,9 @@ export class CategoryService {
     return this.categoryRepository.delete(id);
   }
 
-  async addToOffer(offerId: number, categoryId: number): Promise<Category> {
+  async addToOffer(offerId: number, categoryId: number): Promise<Offer> {
     return this.categoryRepository.addToOffer(offerId, categoryId);
   }
 
-  async removeCategoryFromOffer(offerId: number): Promise<Offer> {
-    return this.categoryRepository.removeCategoryFromOffer(offerId);
-  }
+
 }

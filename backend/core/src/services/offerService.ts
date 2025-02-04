@@ -29,4 +29,8 @@ export class OfferService {
     return this.offerRepository.getOffersByCategory(categoryId);
   }
 
+  async removeCategoryFromOffer(offerId: number): Promise<Offer> {
+    return this.offerRepository.removeCategoryFromOffer(offerId);
+  }
+
 }

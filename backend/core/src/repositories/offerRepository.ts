@@ -1,6 +1,5 @@
-
-import { PrismaClient, Offer } from '@prisma/client';
-import { CreateOfferInput, UpdateOfferInput } from '../types/types';
+import { PrismaClient, Offer } from "@prisma/client";
+import { CreateOfferInput, UpdateOfferInput } from "../types/types";
 
 export class OfferRepository {
   constructor(private prisma: PrismaClient) {}
@@ -35,7 +34,7 @@ export class OfferRepository {
 
   async updateOffer(id: number, offerData: UpdateOfferInput): Promise<Offer> {
     const filteredData = this.filterUndefined(offerData);
-    
+
     return this.prisma.offer.update({
       where: { id },
       data: {
@@ -63,5 +62,13 @@ export class OfferRepository {
     return Object.fromEntries(
       Object.entries(data).filter(([_, v]) => v !== undefined)
     ) as Partial<T>;
+  }
+
+  async removeCategoryFromOffer(offerId: number): Promise<Offer> {
+    return this.prisma.offer.update({
+      where: { id: offerId },
+      data: { categoryId: null },
+      include: { category: true },
+    });
   }
 }

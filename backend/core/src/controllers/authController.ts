@@ -11,6 +11,7 @@ interface RequestBody {
   password: string;
 }
 
+
 const ACCESS_SECRET = process.env.ACCESS_TOKEN_SECRET!;
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET!;
 
@@ -132,7 +133,7 @@ export const register = async (
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
   
-      res.json(payload);
+      res.json({ user: payload});
     } catch (error) {
       res.status(500).json({ error: "Login failed", details: error });
     }

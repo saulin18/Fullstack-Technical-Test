@@ -1,5 +1,4 @@
 
-
 export enum UserRole {
   Admin = 'admin',
   RegularUser = 'regularUser',
@@ -49,5 +48,5 @@ declare global {
   }
 }
 
-export type CreateOfferInput = Omit<Offer, "id" | "deleted" | "category" | "user">;
+export type CreateOfferInput = Omit<Offer, "id" | "deleted" | "category" | "user" | "categoryId">;
 export type UpdateOfferInput = Partial<CreateOfferInput>;
