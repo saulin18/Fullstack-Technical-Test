@@ -32,11 +32,18 @@ router.put(
   offerController.updateOffer
 );
 
-router.delete(
+router.patch(
   "/:id",
   verifyJWT,
   checkRole([UserRole.Admin]),
   offerController.deleteOffer
+);
+
+router.delete(
+  "/:id/category",
+  verifyJWT,
+  checkRole([UserRole.Admin]),
+  offerController.removeCategoryFromOffer
 );
 
 export default router;

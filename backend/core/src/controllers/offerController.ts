@@ -98,4 +98,23 @@ export class OfferController {
       this.handleError(res, 500, "Error interno");
     }
   };
+
+  removeCategoryFromOffer: RequestHandler = async (req, res) => {
+    try {
+      const offerId = parseInt(req.params.id);
+      
+      if (isNaN(offerId)) {
+        res.status(400).json({ error: "ID de oferta inválido" });
+        return;
+      }
+
+      const updatedOffer = await this.offerService.removeCategoryFromOffer(offerId);
+      res.json(updatedOffer);
+    } catch (error) {
+      console.error("Error removeCategoryFromOffer:", error);
+      res.status(500).json({ error: "Error al remover categoría" });
+    }
+  };
+
+
 }
