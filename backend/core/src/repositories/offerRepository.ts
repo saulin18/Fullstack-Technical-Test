@@ -28,7 +28,8 @@ export class OfferRepository {
       data: {
         ...offerData,
         discount: offerData.discount ?? null,
-      },
+      
+      }
     });
   }
 

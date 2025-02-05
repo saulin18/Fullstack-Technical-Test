@@ -1,6 +1,6 @@
 import { apiWithoutAuth } from "./axiosConfig";
 import { api } from "./axiosConfig";
-import { CreateOfferInput, Offer } from "../types/types";
+import { CreateOfferInput, Offer, UpdateOfferInput } from "../types/types";
 
 export const getOffers = async () => {
   const { data } = await apiWithoutAuth.get<Offer[]>(
@@ -29,7 +29,7 @@ export const updateOffer = async ({
   offerData,
 }: {
   id: number;
-  offerData: Omit<Offer, "id">;
+  offerData: UpdateOfferInput;
 }) => {
   const { data } = await api.put<Offer>(
     `/offers/${id}`,

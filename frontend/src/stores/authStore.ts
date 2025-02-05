@@ -26,16 +26,25 @@ const useAuthStore = create<AuthState & AuthActions>((set) => ({
     try {
       set({ isLoading: true });
       const userData = await getCurrentUser();
-      set({ user: userData, isLoading: false });
+     
+      set({ 
+        user: userData ? { 
+          id: userData.id,
+          username: userData.username,
+          role: userData.role
+        } : null,
+        isLoading: false 
+      });
     } catch (error) {
       set({ user: null, isLoading: false });
     }
   },
 
-  login: async (UserData) => {
+  login: async (userData) => {
     set({ isLoading: true, error: null });
     try {
-      set({ user: UserData, isLoading: false });
+    
+      set({ user: { ...userData }, isLoading: false });
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Login failed",
@@ -49,7 +58,10 @@ const useAuthStore = create<AuthState & AuthActions>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const { data } = await registerUser(username, password);
-      set({ user: data.user, isLoading: false });
+      set({ 
+        user: data.user ? { ...data.user } : null,
+        isLoading: false 
+      });
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Registration failed",
@@ -73,7 +85,10 @@ const useAuthStore = create<AuthState & AuthActions>((set) => ({
   },
 
   clearError: () => set({ error: null }),
-  setUser: (user: User | null) => set({ user }),
+  setUser: (user: User | null) => {
+    
+    set({ user: user ? { ...user } : null });
+  },
 }));
 
 export default useAuthStore;

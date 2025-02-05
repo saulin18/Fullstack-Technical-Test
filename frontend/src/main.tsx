@@ -6,37 +6,65 @@ import {
   QueryClient as TanstackQueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
-import DashboardPage from "./pages/DashboardPage";
+import { Suspense } from "react";
+import { lazy } from "react";
+const HomePage = lazy(() => import("./pages/HomePage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage"));
+const OfferDetailPage = lazy(() => import("./pages/OfferDetailPage"));
 import AuthLoader from "./components/containers/AuthLoader";
-import OfferDetailPage from "./pages/OfferDetailPage";
+import Loader from "./components/Loader";
+
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <AuthLoader>
-        <HomePage />,
-      </AuthLoader>
+      <Suspense fallback={<Loader />}>
+        <AuthLoader>
+          <HomePage />,
+        </AuthLoader>
+      </Suspense>
     ),
   },
   {
     path: "auth/register",
-    element: <RegisterPage />,
+
+    element: (
+      <Suspense fallback={<Loader />}>
+        <RegisterPage />,
+      </Suspense>
+    ),
   },
   {
     path: "auth/login",
-    element: <LoginPage />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <LoginPage />,
+      </Suspense>
+    ),
   },
   {
     path: "/dashboard",
-    element: <DashboardPage />,
+
+    element: (
+      <Suspense fallback={<Loader />}>
+        <AuthLoader>
+          <DashboardPage />,
+        </AuthLoader>{" "}
+      </Suspense>
+    ),
   },
+
   {
     path: "offers/:id",
-    element: <OfferDetailPage />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <OfferDetailPage />,
+      </Suspense>
+    ),
   },
 ]);
 
