@@ -12,7 +12,7 @@ export const ProtectedRoute = ({ children, roles }: { children: JSX.Element; rol
     if (!user) {
       navigate('/auth/login');
     } else if (roles && !roles.includes(user.role)) {
-      navigate('/unauthorized');
+      navigate('/');
     }
   }, [user, roles, navigate]);
 

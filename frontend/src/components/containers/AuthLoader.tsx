@@ -1,24 +1,21 @@
-import { useEffect } from "react";
-import { getCurrentUser } from "../../api/auth";
 import useAuthStore from "../../stores/authStore";
 import Loader from "../Loader";
+import { useAuth } from "../../hooks/auth";
+import { useEffect } from "react";
 
 const AuthLoader = ({ children }: { children: React.ReactNode }) => {
-  const { isLoading, setUser } = useAuthStore();
+  const { setUser } = useAuthStore();
+  const { data: user, isLoading: isLoadingUser } = useAuth();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const userData = await getCurrentUser();
-        setUser(userData);
-      } catch (error) {
-        setUser(null);
-      }
-    };
-    checkAuth();
-  }, [setUser]);
+    if (user) {
+      setUser(user);
+    }
+  },[user, setUser]);
+  
 
-  if (isLoading) { 
+
+  if (isLoadingUser) {
     return <Loader />;
   }
 
