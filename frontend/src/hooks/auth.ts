@@ -58,7 +58,6 @@ export const useLogout = () => {
     onSuccess: () => {
       logout();
       queryClient.clear();
-      window.location.href = "/login";
     },
   });
 };
