@@ -19,7 +19,7 @@ export default function OfferDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <OfferCard offer={offer} />
+        <OfferCard offer={offer} isDetail />
       </div>
 
       <div className="mt-8 flex justify-center">

@@ -155,7 +155,7 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Toaster />
 
-        <div className="mb-6 flex flex-col md:flex-row gap-2 justify-start md:justify-end">
+        <div className="mb-2 flex flex-col sm:flex-row gap-2 justify-start md:justify-end">
           <button
             onClick={() => setIsCreateCategoryModalOpen(true)}
             className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"

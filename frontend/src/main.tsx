@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       <Suspense fallback={<Loader />}>
         <AuthLoader>
           <DashboardPage />,
-        </AuthLoader>{" "}
+        </AuthLoader>
       </Suspense>
     ),
   },
@@ -70,10 +70,23 @@ const router = createBrowserRouter([
 
 export const queryClient = new TanstackQueryClient();
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </React.StrictMode>
-);
+const container = document.getElementById('root') as HTMLElement;
+
+let root: ReactDOM.Root;
+
+function render() {
+  if (!root) {
+    root = ReactDOM.createRoot(container);
+  }
+
+
+  root.render(
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+}
+
+render();
