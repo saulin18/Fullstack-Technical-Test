@@ -11,10 +11,16 @@ dotenv.config();
 const app = express();
 const port = 3000;
 
+
+
+const allowedOrigins = process.env.FRONTEND_ORIGINS
+  ? process.env.FRONTEND_ORIGINS.split(',').map(origin => origin.trim())
+  : ['http://localhost:5173']; // Valor por defecto para desarrollo
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true,
+    origin: allowedOrigins,
+    credentials: true
   })
 );
 app.use(express.json());
