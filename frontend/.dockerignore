@@ -1,0 +1,26 @@
+# Ignorar todo por defecto
+*
+
+# Permitir solo lo necesario
+!public
+!src
+!package.json
+!package-lock.json
+!tsconfig.json
+!vite.config.ts
+!tailwind.config.js
+!postcss.config.js
+!dist
+!node_modules
+
+# Excluir
+Dockerfile
+.dockerignore
+.git
+.gitignore
+**/*.spec.ts
+**/*.test.ts
+**/__tests__
+**/coverage
+**/.env.local
+**/.env.*.local
