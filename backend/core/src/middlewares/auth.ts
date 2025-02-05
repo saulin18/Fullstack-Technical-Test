@@ -54,7 +54,7 @@ export const verifyJWT = async (
         res.status(500).json({ error: "Error interno del servidor" });
       }
     }
-  }, 5000);
+  }, 2000);
 };
 
 export const checkRole = (allowedRoles: string[]) => {
