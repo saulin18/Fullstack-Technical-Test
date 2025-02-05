@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { getCurrentUser } from "../../api/auth";
 import useAuthStore from "../../stores/authStore";
+import Loader from "../Loader";
 
 const AuthLoader = ({ children }: { children: React.ReactNode }) => {
   const { isLoading, setUser } = useAuthStore();
@@ -9,7 +10,7 @@ const AuthLoader = ({ children }: { children: React.ReactNode }) => {
     const checkAuth = async () => {
       try {
         const userData = await getCurrentUser();
-        setUser(userData); 
+        setUser(userData);
       } catch (error) {
         setUser(null);
       }
@@ -17,8 +18,8 @@ const AuthLoader = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, [setUser]);
 
-  if (isLoading) {
-    return <div>Cargando...</div>;
+  if (isLoading) { 
+    return <Loader />;
   }
 
   return <>{children}</>;

@@ -29,7 +29,7 @@ export const OfferForm = ({
                   Descripción Corta
               </label>
               <textarea
-                  name="shortDescription"
+                  name="shortDesc"
                   defaultValue={offer?.shortDesc}
                   required
                   rows={3}

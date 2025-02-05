@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Offer } from "../types/types";
+import { CreateOfferInput, Offer } from "../types/types";
 import {
   useGetOffers,
   useCreateOffer,
@@ -20,6 +20,7 @@ import { AddCategoryModal } from "../components/AddCategoryModal";
 import { RemoveCategoryModal } from "../components/RemoveCategoryModal";
 import { CreateCategoryModal } from "../components/CreateCategoryModal";
 import { DeleteCategoryModal } from "../components/DeleteCategoryModal";
+import { z } from "zod";
 
 export default function DashboardPage() {
   const { data: offers } = useGetOffers();
@@ -43,14 +44,35 @@ export default function DashboardPage() {
   const { mutateAsync: addCategoryToOffer } = useAddCategoryToOffer();
   const { mutateAsync: removeCategoryFromOffer } = useRemoveCategoryFromOffer();
 
+  const OfferSchema = z.object({
+    title: z.string().min(3),
+    shortDesc: z.string().min(3),
+    description: z.string().min(3),
+    placeName: z.string().min(3),
+    image: z.string(),
+    location: z.string().min(3),
+    price: z.number().positive(),
+    discount: z.number().optional(),
+    userId: z.number().positive(),
+  });
+
   const handleCreate = async (formData: FormData) => {
     try {
-      const newOffer = formDataToObject(formData);
-      await createMutation.mutateAsync(newOffer);
+      if (!user?.id) {
+        toast.error("Debes iniciar sesión para crear ofertas");
+        return;
+      }
+
+      const newOffer = formDataToObject(formData) as CreateOfferInput;
+
+      const parsedOffer = OfferSchema.parse(newOffer);
+
+      await createMutation.mutateAsync(parsedOffer);
       toast.success("Oferta creada exitosamente");
       setIsCreateModalOpen(false);
     } catch (error) {
       toast.error("Error al crear la oferta");
+      console.error(error);
     }
   };
 
@@ -76,17 +98,16 @@ export default function DashboardPage() {
 
   const formDataToObject = (formData: FormData) => ({
     title: formData.get("title") as string,
-    shortDesc: formData.get("shortDescription") as string,
+    shortDesc: formData.get("shortDesc") as string,
     description: formData.get("description") as string,
     image: formData.get("image") as string,
     placeName: formData.get("placeName") as string,
     location: formData.get("location") as string,
     price: parseFloat(formData.get("price") as string),
     discount: formData.get("discount")
-      ? parseInt(formData.get("discount") as string)
-      : 0,
-    userId: user?.id as number,
-    deleted: false,
+      ? Number(formData.get("discount"))
+      : null,
+    userId: user?.id,
   });
 
   const handleAddCategory = async (categoryId: number) => {

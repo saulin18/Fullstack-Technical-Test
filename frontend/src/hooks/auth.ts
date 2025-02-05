@@ -25,9 +25,6 @@ export const useLogin = () => {
       loginUser(credentials.username, credentials.password),
     onSuccess: (data) => {
       login(data.user);
-      console.log("Login success:", data);
-      console.log("Login success:", data.user);
-
       queryClient.setQueryData(["user"], data.user);
 
       window.location.href = "/";
@@ -39,13 +36,11 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
-
-
   return useMutation({
     mutationFn: (credentials: { username: string; password: string }) =>
       registerUser(credentials.username, credentials.password),
     onSuccess: (data) => {
-      console.log(data)
+      console.log(data);
       window.location.href = "/";
     },
     onError: (error) => {

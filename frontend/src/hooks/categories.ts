@@ -25,6 +25,7 @@ export const useCreateCategory = () => {
       queryClient.setQueryData(["categories"], (oldCategories: Category[]) => {
         const newCategories = [...oldCategories, data];
         return newCategories;
+       
       });
     },
     onError: (error) => {
@@ -39,6 +40,8 @@ export const useDeleteCategory = () => {
   return useMutation<void, Error, number>({
     mutationFn: (id: number) => deleteCategory(id),
     onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["offers"] });
       queryClient.setQueryData(["categories"], (oldCategories: Category[]) => {
         return oldCategories.filter((category) => category.id !== id);
       });
