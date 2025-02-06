@@ -19,8 +19,9 @@ export const verifyJWT = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const authHeader = req.headers.authorization;
- const token = req.cookies.accessToken || (authHeader && authHeader.split(" ")[1]);
+
+  const token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
+
 
   if (!token) {
     res.status(401).json({ error: "Token no proporcionado" });
@@ -30,10 +31,13 @@ export const verifyJWT = async (
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!) as {
       id: number;
+      username: string;
+      role: string;
+
     };
 
      const user = await prisma.user.findFirst({
-        where: { id: decoded.id, role: "admin" },
+        where: { id: decoded.id, username: decoded.username },
         select: { id: true, username: true, role: true },
       });
     
