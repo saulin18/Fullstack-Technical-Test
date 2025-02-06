@@ -21,18 +21,16 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => {
-
-    if (response.config.url?.includes("/auth/me")) {
-      useAuthStore.getState().setUser(response.data.user);
-    }
-    return response;
-
     if (
       response.config.url?.includes("/auth/login") &&
       response.data.accessToken
     ) {
       Cookies.set("accessToken", response.data.accessToken);
       Cookies.set("refreshToken", response.data.refreshToken);
+    }
+
+    if (response.config.url?.includes("/auth/me")) {
+      useAuthStore.getState().setUser(response.data.user);
     }
     return response;
   },
@@ -43,7 +41,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const { data } = await apiWithoutAuth.post("/auth/refresh", {
+        const { data } = await apiWithoutAuth.post("/auth/refresh-token", {
           refreshToken: Cookies.get("refreshToken"),
         });
 
