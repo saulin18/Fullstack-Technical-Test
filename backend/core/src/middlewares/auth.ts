@@ -19,7 +19,9 @@ export const verifyJWT = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
+
   const token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
+
 
   if (!token) {
     res.status(401).json({ error: "Token no proporcionado" });

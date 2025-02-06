@@ -46,8 +46,10 @@ api.interceptors.response.use(
          refreshToken,
         });
 
+
         Cookies.set("accessToken", data.accessToken, { sameSite: "lax", secure: false });
         Cookies.set("refreshToken", data.refreshToken, { sameSite: "lax", secure: false });
+
         api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
