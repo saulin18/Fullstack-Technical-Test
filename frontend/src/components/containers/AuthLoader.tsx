@@ -11,9 +11,7 @@ const AuthLoader = ({ children }: { children: React.ReactNode }) => {
     if (user) {
       setUser(user);
     }
-  },[user, setUser]);
-  
-
+  }, [user, setUser]);
 
   if (isLoadingUser) {
     return <Loader />;

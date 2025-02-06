@@ -15,8 +15,7 @@ const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const OfferDetailPage = lazy(() => import("./pages/OfferDetailPage"));
 import AuthLoader from "./components/containers/AuthLoader";
 import Loader from "./components/Loader";
-
-
+import { ProtectedRoute } from "./components/containers/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -51,9 +50,11 @@ const router = createBrowserRouter([
 
     element: (
       <Suspense fallback={<Loader />}>
-        <AuthLoader>
-          <DashboardPage />,
-        </AuthLoader>
+        <ProtectedRoute roles={["admin"]}>
+          <AuthLoader>
+            <DashboardPage />,
+          </AuthLoader>
+        </ProtectedRoute>
       </Suspense>
     ),
   },
@@ -70,7 +71,7 @@ const router = createBrowserRouter([
 
 export const queryClient = new TanstackQueryClient();
 
-const container = document.getElementById('root') as HTMLElement;
+const container = document.getElementById("root") as HTMLElement;
 
 let root: ReactDOM.Root;
 
@@ -78,7 +79,6 @@ function render() {
   if (!root) {
     root = ReactDOM.createRoot(container);
   }
-
 
   root.render(
     <React.StrictMode>

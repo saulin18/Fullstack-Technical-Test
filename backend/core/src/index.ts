@@ -13,11 +13,11 @@ const port = 3000;
 
 const allowedOrigins = process.env.FRONTEND_ORIGINS
   ? process.env.FRONTEND_ORIGINS.split(",").map((origin) => origin.trim())
-  : ["http://localhost:5173"]; // Valor por defecto para desarrollo
+  : ["http://localhost:5173"]; 
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: true,
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
