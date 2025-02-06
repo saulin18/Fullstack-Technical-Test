@@ -45,10 +45,9 @@ api.interceptors.response.use(
           refreshToken: Cookies.get("refreshToken"),
         });
 
-        Cookies.set("accessToken", data.accessToken);
-        Cookies.set("refreshToken", data.refreshToken);
-
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        Cookies.set("accessToken", data.accessToken, { sameSite: "none", secure: true });
+        Cookies.set("refreshToken", data.refreshToken, { sameSite: "none", secure: true });
+        api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
         Cookies.remove("accessToken");

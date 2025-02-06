@@ -69,14 +69,14 @@ export const register = async (
 
     res.cookie("accessToken", tokens.accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", tokens.refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -94,8 +94,13 @@ export const login = async (
   try {
     const { username, password } = req.body;
 
+    if (!username || !password) {
+      res.status(400).json({ error: "Username and password are required" });
+      return;
+    }
+
     const user = await prisma.user.findUnique({ 
-      where: { username: username || '' },
+      where: { username },
       select: {
         id: true,
         username: true,
@@ -104,7 +109,7 @@ export const login = async (
       }
     });
     
-    if (!user || !(await bcrypt.compare(password || '', user.password))) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       res.status(401).json({ error: "Invalid credentials" });
       return;
     }
@@ -124,19 +129,22 @@ export const login = async (
 
     res.cookie("accessToken", tokens.accessToken, {
       httpOnly: true,
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", tokens.refreshToken, {
       httpOnly: true,
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({ user: payload });
   } catch (error) {
-    res.status(500).json({ error: "Login failed", details: error });
+    console.error("Error en login:", error);
+    res.status(500).json({ error: "Login failed" });
   }
 };
 
@@ -145,15 +153,14 @@ export const refreshToken = async (
   res: Response
 ): Promise<void> => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const { refreshToken } = req.body;
     if (!refreshToken) {
       res.status(401).json({ error: 'No refresh token provided' });
       return;
     }
-
     const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as { id: number };
-    
-    const user = await prisma.user.findUnique({
+
+    const user = await prisma.user.findFirst({
       where: { id: decoded.id, refreshToken },
       select: { 
         id: true, 
@@ -183,13 +190,15 @@ export const refreshToken = async (
 
     res.cookie("accessToken", tokens.accessToken, {
       httpOnly: true,
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 15 * 60 * 1000,
     });
 
     res.json(payload);
   } catch (error) {
-    res.status(403).json({ error: "Token refresh failed", details: error });
+    console.error("Error en refreshToken:", error);
+    res.status(403).json({ error: "Token refresh failed" });
   }
 };
 
