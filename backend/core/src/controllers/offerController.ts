@@ -84,20 +84,6 @@ export class OfferController {
     }
   };
 
-  getOffersByCategory: RequestHandler<CategoryParams> = async (req, res, next) => {
-    try {
-      const categoryId = parseInt(req.params.id);
-      if (isNaN(categoryId)) {
-        this.handleError(res, 400, "ID inválido");
-        return;
-      }
-
-      const offers = await this.offerService.getOffersByCategory(categoryId);
-      this.sendResponse(res, 200, offers);
-    } catch (error) {
-      this.handleError(res, 500, "Error interno");
-    }
-  };
 
   removeCategoryFromOffer: RequestHandler = async (req, res) => {
     try {

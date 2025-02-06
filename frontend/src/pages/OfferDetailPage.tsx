@@ -1,26 +1,39 @@
 import { useParams } from "react-router-dom";
 import { useGetOfferById } from "../hooks/offers";
-import { OfferCard } from "../components/OfferCard";
+import { OfferCard } from "../components/offers/OfferCard";
+import useOffersStore from "../stores/offersStore";
 
 export default function OfferDetailPage() {
   const { id } = useParams();
-  const { data: offer } = useGetOfferById(parseInt(id as string));
+  const { data: MyOffer } = useGetOfferById(parseInt(id as string));
+  const { offers } = useOffersStore()
 
-  if (!offer) {
+  if (!MyOffer) {
     return <div>Cargando...</div>;
   }
+
+  const recommendedOffers = offers.filter((offer) => {
+    offer.category?.name === MyOffer.category?.name
+  })
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Oferta {offer.title}
+          Oferta {MyOffer.title}
         </h1>
       </div>
 
       <div className="grid grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <OfferCard offer={offer} isDetail />
+        <OfferCard offer={MyOffer} isDetail />
       </div>
+
+      <div className="grid grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {recommendedOffers.map((offer) => (
+          <OfferCard key={offer.id} offer={offer} isDetail/>
+      ))}
+      </div>
+
 
       <div className="mt-8 flex justify-center">
         <button

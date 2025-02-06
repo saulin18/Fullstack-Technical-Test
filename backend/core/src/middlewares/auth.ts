@@ -32,8 +32,8 @@ export const verifyJWT = async (
         id: number;
       };
 
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.id },
+      const user = await prisma.user.findFirst({
+        where: { id: decoded.id, role: "admin" },
         select: { id: true, username: true, role: true },
       });
 

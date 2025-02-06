@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getOffers, getOfferById, createOffer, updateOffer, deleteOffer, getOffersByCategory } from "../api/offers";
+import { getOffers, getOfferById, createOffer, updateOffer, deleteOffer, } from "../api/offers";
 import { queryClient } from "../main";
 
 
@@ -46,9 +46,3 @@ export const useDeleteOffer = () => {
   });
 };
 
-export const useGetOffersByCategory = (categoryId: number) => {
-  return useQuery({
-    queryKey: ["offersByCategory", categoryId],
-    queryFn: () => getOffersByCategory(categoryId),
-  });
-};

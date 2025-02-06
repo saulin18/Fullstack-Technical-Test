@@ -1,5 +1,5 @@
-import { Modal } from "./Modal";
-import { useCreateCategory } from "../hooks/categories";
+import { Modal } from "../Modal";
+import { useCreateCategory } from "../../hooks/categories";
 
 export const CreateCategoryModal = ({
   onClose,

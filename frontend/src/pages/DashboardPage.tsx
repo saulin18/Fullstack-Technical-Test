@@ -11,15 +11,15 @@ import {
   useCategories,
   useRemoveCategoryFromOffer,
 } from "../hooks/categories";
-import { OfferCard } from "../components/OfferCard";
-import { OfferForm } from "../components/OfferForm";
-import { OfferModal } from "../components/OfferModal";
+import { OfferCard } from "../components/offers/OfferCard";
+import { OfferForm } from "../components/offers/OfferForm";
+import { OfferModal } from "../components/offers/OfferModal";
 import { toast, Toaster } from "sonner";
 import useAuthStore from "../stores/authStore";
-import { AddCategoryModal } from "../components/AddCategoryModal";
-import { RemoveCategoryModal } from "../components/RemoveCategoryModal";
-import { CreateCategoryModal } from "../components/CreateCategoryModal";
-import { DeleteCategoryModal } from "../components/DeleteCategoryModal";
+import { AddCategoryModal } from "../components/categories/AddCategoryModal";
+import { RemoveCategoryModal } from "../components/categories/RemoveCategoryModal";
+import { CreateCategoryModal } from "../components/categories/CreateCategoryModal";
+import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModal";
 import { z } from "zod";
 
 export default function DashboardPage() {

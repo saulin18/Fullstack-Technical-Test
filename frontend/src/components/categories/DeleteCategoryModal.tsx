@@ -1,6 +1,6 @@
-import { Modal } from "./Modal";
-import { Category } from "../types/types";
-import { useDeleteCategory } from "../hooks/categories";
+import { Modal } from "../Modal";
+import { Category } from "../../types/types";
+import { useDeleteCategory } from "../../hooks/categories";
 
 export const DeleteCategoryModal = ({
   categories,

@@ -42,9 +42,4 @@ export const deleteOffer = async (id: number) => {
   await api.patch(`/offers/${id}`);
 };
 
-export const getOffersByCategory = async (categoryId: number) => {
-  const { data } = await api.get<Offer[]>(
-    `/offers/category/${categoryId}`
-  );
-  return data;
-};
+
