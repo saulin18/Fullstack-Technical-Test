@@ -6,6 +6,7 @@ import {
   registerUser,
 } from "../api/auth";
 import useAuthStore from "../stores/authStore";
+import { toast } from "sonner";
 
 export const useAuth = () => {
   return useQuery({
@@ -29,9 +30,11 @@ export const useLogin = () => {
 
       window.location.href = "/";
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Login error:", error);
+      toast.error(error.response.data.message);
     },
+    throwOnError: false,
   });
 };
 
@@ -43,9 +46,11 @@ export const useRegister = () => {
       console.log(data);
       window.location.href = "/";
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Registration error:", error);
+      toast.error(error.response.data.message);
     },
+    throwOnError: false,
   });
 };
 

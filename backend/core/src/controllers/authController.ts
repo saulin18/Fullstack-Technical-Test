@@ -36,14 +36,18 @@ export const register = async (
   try {
     const { username, password } = req.body;
 
-    if (!username || !password) {
-      res.status(400).json({ error: "Username and password are required" });
+    if (!username || !password) { 
+      res.status(400).json({ message: "Username and password are required",
+      success: false
+    });
       return;
     }
 
     const existingUser = await prisma.user.findUnique({ where: { username } });
     if (existingUser) {
-      res.status(409).json({ error: "Username already exists" });
+      res.status(409).json({ message: "Username already exists",
+      success: false
+    });
       return;
     }
 
@@ -86,8 +90,8 @@ export const register = async (
 
     res.json({ user: safeUser });
   } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ error: "Registration failed", details: error });
+    console.error("Registration error:", error);  
+    res.status(500).json({ message: "Registration failed, server error", details: error });
   }
 };
 
@@ -97,8 +101,8 @@ export const login = async (
 ): Promise<void> => {
   try {
     const { username, password } = req.body;
-    if (!username || !password) {
-      res.status(400).json({ error: "Username and password are required" });
+ if (!username || !password) {
+      res.status(400).json({ message: "Username and password are required" });
       return;
     }
 
@@ -112,9 +116,11 @@ export const login = async (
       },
     });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-    
-      res.status(401).json({ error: "Invalid credentials" });
+    if (!user || !(await bcrypt.compare(password, user.password))) {  
+      res.status(401).json({ 
+        message: "Invalid credentials",
+        success: false
+      });
       return;
     }
 
@@ -148,7 +154,7 @@ export const login = async (
 
     res.json({ user: payload });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Login error:", error); 
     res.status(500).json({ error: "Login failed", details: error });
   }
 };
