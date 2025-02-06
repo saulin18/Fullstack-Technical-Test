@@ -19,42 +19,45 @@ export const verifyJWT = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  setTimeout(async () => {
-    const token = req.cookies.accessToken;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token) {
-      res.status(401).json({ error: "Token no proporcionado" });
-      return;
-    }
+  if (!token) {
+    res.status(401).json({ error: "Token no proporcionado" });
+    return;
+  }
 
-    try {
-      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!) as {
-        id: number;
-      };
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!) as {
+      id: number;
+    };
 
-      const user = await prisma.user.findFirst({
+     const user = await prisma.user.findFirst({
         where: { id: decoded.id, role: "admin" },
         select: { id: true, username: true, role: true },
       });
-
-      if (!user) {
-        res.status(404).json({ error: "Usuario no encontrado" });
-        return;
-      }
-
-      req.user = user;
-      next();
-    } catch (error) {
-      if (error instanceof jwt.TokenExpiredError) {
-        res.status(401).json({ error: "Token expirado" });
-      } else if (error instanceof jwt.JsonWebTokenError) {
-        res.status(401).json({ error: "Token inválido" });
-      } else {
-        console.error("Error en verifyJWT:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-      }
+    
+    
+    if (!user) {
+      res.status(404).json({ error: "Usuario no encontrado" });
+      return;
     }
-  }, 2000);
+    console.log("Headers recibidos:", req.headers);
+    console.log("Cookies recibidas:", req.cookies);
+    console.log("Token detectado:", token);
+    req.user = user;
+    next();
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(401).json({ error: "Token expirado" });
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).json({ error: "Token inválido" });
+    } else {
+      console.error("Error en verifyJWT:", error);
+      console.log(error)
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  }
 };
 
 export const checkRole = (allowedRoles: string[]) => {

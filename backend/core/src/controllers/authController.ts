@@ -94,7 +94,11 @@ export const login = async (
 ): Promise<void> => {
   try {
     const { username, password } = req.body;
-
+ if (!username || !password) {
+      res.status(400).json({ error: "Username and password are required" });
+      return;
+    }
+      
     const user = await prisma.user.findFirst({
       where: { username: username },  
       select: {
@@ -150,15 +154,14 @@ export const refreshToken = async (
   res: Response
 ): Promise<void> => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken  = req.body.refreshToken;
     if (!refreshToken) {
       res.status(401).json({ error: 'No refresh token provided' });
       return;
     }
-
     const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as { id: number };
-    
-    const user = await prisma.user.findUnique({
+
+    const user = await prisma.user.findFirst({
       where: { id: decoded.id, refreshToken },
       select: { 
         id: true, 
@@ -188,13 +191,15 @@ export const refreshToken = async (
 
     res.cookie("accessToken", tokens.accessToken, {
       httpOnly: true,
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
 
     res.json(payload);
   } catch (error) {
-    res.status(403).json({ error: "Token refresh failed", details: error });
+    console.error("Error en refreshToken:", error);
+    res.status(403).json({ error: "Token refresh failed" });
   }
 };
 
