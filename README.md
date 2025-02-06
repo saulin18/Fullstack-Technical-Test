@@ -32,7 +32,7 @@ DATABASE_URL="postgresql://postgres:mysecretpassword@postgres:5432/mydb?schema=p
 
 #### Comandos Clave
 
-npm run dev # Inicia servidor en desarrollo npx prisma generate # Genera cliente Prisma npx prisma migrate dev --name init # Ejecuta migraciones npm run mock # Pobla DB con datos de prueba
+npm run dev # Inicia servidor en desarrollo npx prisma generate # Genera cliente Prisma npx prisma migrate dev --name init # Ejecuta migraciones npx ts-node src/scripts/mocks.ts # Pobla DB con datos de prueba
 
 ### 3. Configuración del Frontend
 
@@ -76,6 +76,7 @@ Servido con serve
 
 Ejecución
 docker-compose up --build
+
 4. Script de Inicialización (run.sh)
 Funcionalidades
 Verifica instalación de Docker
@@ -107,13 +108,15 @@ chmod +x run.sh
 Requisitos
 Node.js18+
 
-Docker 20+
+Docker 20+ (opcional pero recomendado)
 
 npm 9+
 
 Pasos Manuales (sin Docker)
 Base de datos
-docker run --name postgres_container -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d o usar DATABASE_URL=postgresql://saul:M4KH51h2rBzmIo4LJwKM2qwChVAbxDE0@dpg-cuic9aaj1k6c73asejmg-a.oregon-postgres.render.com/sauldb en el .env de backend/core
+docker run --name postgres_container -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d o crear un archivo .env en el backend/core con tu propio valor de DATABASE_URL
+
+Example: DATABASE_URL=postgresql://postgres:mysecretpassword@localhost:5432/mydb?schema=public
 
 postgres:15-alpine
 Backend
@@ -125,3 +128,5 @@ Frontend
 cd frontend
 npm install
 npm run dev
+
+### Muy importante correr el script en backend/core con npx ts-node src/scripts/mocks.ts para crear los datos iniciales, usuario con permisos de administrador: admin, contraseña: admin123

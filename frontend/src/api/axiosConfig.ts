@@ -25,8 +25,8 @@ api.interceptors.response.use(
       response.config.url?.includes("/auth/login") &&
       response.data.accessToken
     ) {
-      Cookies.set("accessToken", response.data.accessToken);
-      Cookies.set("refreshToken", response.data.refreshToken);
+      Cookies.set("accessToken", response.data.accessToken, { secure: false });
+      Cookies.set("refreshToken", response.data.refreshToken, { secure: false });
     }
 
     if (response.config.url?.includes("/auth/me")) {
@@ -41,19 +41,18 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
+        const refreshToken = Cookies.get("refreshToken");
         const { data } = await apiWithoutAuth.post("/auth/refresh-token", {
-          refreshToken: Cookies.get("refreshToken"),
+         refreshToken,
         });
 
-        Cookies.set("accessToken", data.accessToken, { sameSite: "none", secure: true });
-        Cookies.set("refreshToken", data.refreshToken, { sameSite: "none", secure: true });
+        Cookies.set("accessToken", data.accessToken, { sameSite: "lax", secure: false });
+        Cookies.set("refreshToken", data.refreshToken, { sameSite: "lax", secure: false });
         api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
         Cookies.remove("accessToken");
         Cookies.remove("refreshToken");
-        useAuthStore.getState().logout();
-        window.location.href = "/auth/login";
         return Promise.reject(refreshError);
       }
     }

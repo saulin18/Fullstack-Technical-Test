@@ -68,16 +68,18 @@ export const register = async (
     });
 
     res.cookie("accessToken", tokens.accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+    
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", tokens.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -128,16 +130,18 @@ export const login = async (
     });
 
     res.cookie("accessToken", tokens.accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+    
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", tokens.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -190,9 +194,10 @@ export const refreshToken = async (
     });
 
     res.cookie("accessToken", tokens.accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+    
       maxAge: 15 * 60 * 1000,
     });
 

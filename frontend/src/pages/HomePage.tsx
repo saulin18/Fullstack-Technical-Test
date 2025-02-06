@@ -4,8 +4,9 @@ import { useGetOffers } from "../hooks/offers";
 import { useCategories } from "../hooks/categories";
 import useCategoriesStore from "../stores/categoriesStore";
 import AdminDashboardButton from "../components/DashboardButton";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Skeleton from "../components/Skeleton";
+import useAuthStore from "../stores/authStore";
 
 export default function HomePage() {
   const { data: offers, isLoading, isError } = useGetOffers();
@@ -20,6 +21,14 @@ export default function HomePage() {
     (value, index, self) => self.indexOf(value) === index
   );
 
+  const { user } = useAuthStore();
+
+    if (!user) {
+      return <Navigate to="/auth/login" />;
+    }
+
+    console.log(user.username)
+
   useEffect(() => {
     if (categoriesData) {
       setCategories(categoriesData);
@@ -32,14 +41,16 @@ export default function HomePage() {
       : offers?.filter((offer) => offer.category?.name === selectedCategory) ||
         [];
 
-  const offersWithoutDuplicates = filteredOffers?.filter((offer, index, self) => self.findIndex(o => o.id === offer.id) === index);
+  const offersWithoutDuplicates = filteredOffers?.filter(
+    (offer, index, self) => self.findIndex((o) => o.id === offer.id) === index
+  );
 
- const offersToShow = offersWithoutDuplicates?.filter((offer) => offer.deleted === false);
-   
+  const offersToShow = offersWithoutDuplicates?.filter(
+    (offer) => offer.deleted === false
+  );
+
   if (isLoading) {
-    return (
-       <Skeleton />
-    );
+    return <Skeleton />;
   }
 
   if (isError) {
@@ -54,12 +65,12 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Ofertas Especiales
-          </h1>  
-          <div className="flex flex-wrap gap-2">
+          </h1>
+          <div className="flex flex-wrap items-center gap-3">
             {categoryNamesWithoutDuplicates.map((category) => (
               <button
                 key={category}
@@ -74,9 +85,20 @@ export default function HomePage() {
                 {category === "all" ? "Todas" : category}
               </button>
             ))}
-         <AdminDashboardButton /> </div>
+          </div>
+        </div>{" "}
+        <div className="flex flex-row mb-4 gap-3 items-center">
+          {user && user.role === "admin" && <AdminDashboardButton />}{" "}
+          <Link
+            to="/auth/register"
+            className="text-gray-900  text-sm font-medium"
+          >
+            Registrarse
+          </Link>
+          <Link to="/auth/login" className="text-gray-900 text-sm font-medium">
+            Iniciar Sesión
+          </Link>{" "}
         </div>
-
         {offersToShow.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
@@ -86,11 +108,8 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {offersToShow?.map((offer) => (
-              <Link
-                key={offer.id}
-                to={`/offers/${offer.id}`}
-                className="block">
-              <OfferCard key={offer.id} offer={offer} />
+              <Link key={offer.id} to={`/offers/${offer.id}`} className="block">
+                <OfferCard key={offer.id} offer={offer} />
               </Link>
             ))}
           </div>
