@@ -34,7 +34,7 @@ export const register = async (
   try {
     const { username, password } = req.body;
 
-    if (!username || !password) {
+    if (!username || !password) { 
       res.status(400).json({ error: "Username and password are required" });
       return;
     }
@@ -83,6 +83,7 @@ export const register = async (
 
     res.json({ user: safeUser });
   } catch (error) {
+    console.error("Registration error:", error);  
     res.status(500).json({ error: "Registration failed", details: error });
   }
 };
@@ -93,14 +94,13 @@ export const login = async (
 ): Promise<void> => {
   try {
     const { username, password } = req.body;
-
-    if (!username || !password) {
+ if (!username || !password) {
       res.status(400).json({ error: "Username and password are required" });
       return;
     }
-
-    const user = await prisma.user.findUnique({ 
-      where: { username },
+      
+    const user = await prisma.user.findFirst({
+      where: { username: username },  
       select: {
         id: true,
         username: true,
@@ -108,8 +108,8 @@ export const login = async (
         role: true
       }
     });
-    
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+
+    if (!user || !(await bcrypt.compare(password, user.password))) { // Corregido: Eliminado la condición  || ''
       res.status(401).json({ error: "Invalid credentials" });
       return;
     }
@@ -141,12 +141,13 @@ export const login = async (
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.json({ user: payload });
+    res.json({ user: payload }); 
   } catch (error) {
-    console.error("Error en login:", error);
-    res.status(500).json({ error: "Login failed" });
+    console.error("Login error:", error); 
+    res.status(500).json({ error: "Login failed", details: error });
   }
 };
+
 
 export const refreshToken = async (
   req: Request,

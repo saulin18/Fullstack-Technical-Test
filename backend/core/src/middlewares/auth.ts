@@ -32,11 +32,12 @@ export const verifyJWT = async (
       id: number;
     };
 
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: { id: true, username: true, role: true },
-    });
-
+     const user = await prisma.user.findFirst({
+        where: { id: decoded.id, role: "admin" },
+        select: { id: true, username: true, role: true },
+      });
+    
+    
     if (!user) {
       res.status(404).json({ error: "Usuario no encontrado" });
       return;

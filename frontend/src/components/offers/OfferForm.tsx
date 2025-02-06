@@ -1,4 +1,4 @@
-import { Offer } from "../types/types";
+import { Offer } from "../../types/types";
 
 export const OfferForm = ({ 
   offer, 

@@ -1,5 +1,5 @@
-import { Offer } from "../types/types";
-import { Modal } from "./Modal";
+import { Offer } from "../../types/types";
+import { Modal } from "../Modal";
 
 
 export const RemoveCategoryModal = ({

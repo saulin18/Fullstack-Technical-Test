@@ -52,12 +52,6 @@ export class OfferRepository {
     });
   }
 
-  async getOffersByCategory(categoryId: number): Promise<Offer[]> {
-    return this.prisma.offer.findMany({
-      where: { categoryId },
-      include: { category: true },
-    });
-  }
 
   private filterUndefined<T extends object>(data: T): Partial<T> {
     return Object.fromEntries(

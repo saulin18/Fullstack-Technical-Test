@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get("/", offerController.getOffers);
 router.get("/:id", offerController.getOfferById);
-router.get("/category/:id", offerController.getOffersByCategory);
+
 
 router.post(
   "/",

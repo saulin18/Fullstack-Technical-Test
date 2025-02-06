@@ -1,5 +1,6 @@
 import React from "react";
 import { useRegister } from "../hooks/auth";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
   const { mutate } = useRegister();
@@ -11,7 +12,13 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate(userData);
+    try {
+      await mutate(userData);
+    } catch (error: any) {
+      if (error.response.status == 409) {
+        toast.error("El usuario ya existe");
+      }
+    }
   };
 
   return (

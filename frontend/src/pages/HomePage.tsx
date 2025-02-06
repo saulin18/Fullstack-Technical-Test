@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { OfferCard } from "../components/OfferCard";
+import { OfferCard } from "../components/offers/OfferCard";
 import { useGetOffers } from "../hooks/offers";
 import { useCategories } from "../hooks/categories";
 import useCategoriesStore from "../stores/categoriesStore";

@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useLogin } from "../hooks/auth";
 import { useState } from "react";
 
@@ -11,7 +12,13 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate(credentials);
+    try {
+      await mutate(credentials);
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast.error("Te has equivocado en username o password.");
+      }
+    }
   };
 
   return (

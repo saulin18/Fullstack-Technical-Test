@@ -1,9 +1,9 @@
-# Etapa de construcción
+
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copiar dependencias e instalar
+
 COPY package*.json ./
 COPY prisma ./prisma/
 RUN npm install

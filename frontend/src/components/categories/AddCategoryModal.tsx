@@ -1,5 +1,5 @@
-import { Category} from "../types/types";
-import { Modal } from "./Modal";
+import { Category} from "../../types/types";
+import { Modal } from "../Modal";
 
 
 export const AddCategoryModal = ({
