@@ -45,15 +45,13 @@ api.interceptors.response.use(
           refreshToken: Cookies.get("refreshToken"),
         });
 
-        Cookies.set("accessToken", data.accessToken, { sameSite: "none", secure: true });
-        Cookies.set("refreshToken", data.refreshToken, { sameSite: "none", secure: true });
+        Cookies.set("accessToken", data.accessToken, );
+        Cookies.set("refreshToken", data.refreshToken,);
         api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
         Cookies.remove("accessToken");
         Cookies.remove("refreshToken");
-        useAuthStore.getState().logout();
-        window.location.href = "/auth/login";
         return Promise.reject(refreshError);
       }
     }
