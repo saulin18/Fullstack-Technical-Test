@@ -19,7 +19,7 @@ export const registerUser = async (username: string, password: string) => {
 
 export const refreshToken = async (refreshToken: string) => {
   const { data } = await api.post(
-    `/auth/refresh`,
+    `/auth/refresh-token`,
     { refreshToken }
   );
   return data;
