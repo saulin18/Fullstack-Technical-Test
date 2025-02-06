@@ -27,7 +27,6 @@ export default function HomePage() {
       return <Navigate to="/auth/login" />;
     }
 
-    console.log(user.username)
 
   useEffect(() => {
     if (categoriesData) {
