@@ -16,7 +16,7 @@ export const DeleteCategoryModal = ({
     const formData = new FormData(e.currentTarget);
     const categoryId = parseInt(formData.get("categoryId") as string);
     
-    if (categoryId) {
+    if (!isNaN(categoryId)) {
       deleteCategory.mutate(categoryId);
       onClose();
     }

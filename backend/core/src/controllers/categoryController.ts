@@ -22,20 +22,25 @@ export class CategoryController {
     }
   };
 
-  deleteCategory: RequestHandler = async (req, res): Promise<void> => {
-    try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        res.status(400).json({ error: "ID inválido" });
-        return;
-      }
 
-      await this.categoryService.delete(id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ error: "Error al eliminar" });
+deleteCategory: RequestHandler = async (req, res): Promise<void> => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "ID inválido" });
+      return;
     }
-  };
+
+    await this.categoryService.delete(id);
+    res.status(204).send();
+  } catch (error) {
+    console.error("Delete category error:", error); 
+    res.status(500).json({ 
+      error: "Error al eliminar",
+      details: error instanceof Error ? error.message : "Unknown error"
+    });
+  }
+};
 
   addToOffer: RequestHandler = async (req, res): Promise<void> => {
     try {

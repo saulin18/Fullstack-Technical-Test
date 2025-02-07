@@ -27,7 +27,6 @@ export default function HomePage() {
       return <Navigate to="/auth/login" />;
     }
 
-
   useEffect(() => {
     if (categoriesData) {
       setCategories(categoriesData);
@@ -54,7 +53,7 @@ export default function HomePage() {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 py-8 h-dvh">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-red-500 text-lg">Error cargando las ofertas</p>
         </div>
@@ -63,7 +62,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen h-dvh bg-gray-50 py-8">
       <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">

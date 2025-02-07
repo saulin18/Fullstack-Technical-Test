@@ -11,6 +11,7 @@ import { useDashboard } from "../hooks/dashboard";
 import { DashboardHeader } from "../components/dashboard/DashboardHeader";
 import { Offer } from "../types/types";
 import { useAuth } from "../hooks/auth";
+import { Link } from "react-router-dom";
 
 export default function DashboardPage() {
   const {
@@ -29,11 +30,25 @@ export default function DashboardPage() {
   const { data: user } = useAuth();
 
   if (!user) {
-    return <div>No tienes permisos para ver el dashboard</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-12">
+            <p className="flex flex-col items-center justify-center text-gray-500 text-lg">
+              No tienes permisos para ver el dashboard
+
+              <Link to="/auth/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+                Iniciar sesión
+              </Link>
+            </p>
+          </div>
+        </div>  
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen h-dvh bg-gray-50">
       <DashboardHeader />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

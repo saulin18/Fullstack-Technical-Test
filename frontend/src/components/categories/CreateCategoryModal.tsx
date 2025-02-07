@@ -14,7 +14,7 @@ export const CreateCategoryModal = ({
     const name = formData.get("name") as string;
     
     if (name) {
-      createCategory.mutate({ id: 0, name }); 
+      createCategory.mutate({ name }); 
       onClose();
     }
   };

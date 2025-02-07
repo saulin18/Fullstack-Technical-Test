@@ -4,7 +4,7 @@ import {
   createCategory,
   deleteCategory,
 } from "../api/categories";
-import { Category } from "../types/types";
+import { Category, CreateCategoryInput } from "../types/types";
 import { api } from "../api/axiosConfig";
 
 export const useCategories = () => {
@@ -12,21 +12,24 @@ export const useCategories = () => {
     queryKey: ["categories"],
     queryFn: getCategories,
     retry: false,
-    staleTime: Infinity,
   });
 };
+
+
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (categoryData: Category) => createCategory(categoryData),
-    onSuccess: (data) => {
+    mutationFn: (categoryData: CreateCategoryInput) => createCategory(categoryData),
+    onSuccess: (data) => {  
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.setQueryData(["categories"], (oldCategories: Category[]) => {
         const newCategories = [...oldCategories, data];
-        return newCategories;
+        return newCategories;   
        
-      });
+      })
+     
     },
     onError: (error) => {
       console.error("Category creation error:", error);

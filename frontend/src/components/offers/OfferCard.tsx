@@ -17,8 +17,11 @@ export function OfferCard({
   onRemoveCategory,
   isDetail,
 }: OfferCardProps) {
-  const discountedPrice = offer.discount
-    ? offer.price * (1 - offer.discount / 100)
+  const hasValidDiscount =
+    offer.discount && offer.discount > 0 && offer.discount <= 100;
+
+  const discountedPrice = hasValidDiscount
+    ? offer.price * (1 - offer.discount! / 100)
     : offer.price;
 
   return (
@@ -29,7 +32,7 @@ export function OfferCard({
           alt={offer.title}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        {offer.discount && (
+        {hasValidDiscount && (
           <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-md text-sm font-semibold">
             -{offer.discount}%
           </div>
@@ -46,14 +49,23 @@ export function OfferCard({
             </span>
           </div>
           <div className="text-right">
-            {offer.discount && (
-              <span className="block text-sm text-gray-500 line-through">
+            {hasValidDiscount ? (
+              <>
+                <span className="block text-sm text-gray-500 line-through">
+                  ${offer.price.toFixed(2)}
+                </span>
+                <span className="text-lg font-bold text-gray-900">
+                  ${discountedPrice.toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="text-lg font-bold text-gray-900">
                 ${offer.price.toFixed(2)}
               </span>
             )}
-            <span className="text-lg font-bold text-gray-900">
-              ${discountedPrice.toFixed(2)}
-            </span>
+            {offer.discount === 100 && (
+              <span className="ml-2 text-green-500 text-sm">GRATIS</span>
+            )}
           </div>
         </div>
         <p className="text-gray-600 text-sm mb-3">
@@ -82,26 +94,25 @@ export function OfferCard({
           {offer.placeName} - {offer.location}
         </div>
         {onEdit && (
-          <div className="flex justify-end space-x-2">
+          <div className="flex justify-end space-x-2 mt-4">
             <button
               onClick={() => onEdit?.(offer)}
               className="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Editar
-            </button>{" "}
+            </button>
+            {onDelete && (
+              <button
+                onClick={() => onDelete?.(offer.id)}
+                className="px-3 py-1 border border-red-300 rounded-md text-sm text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                Eliminar
+              </button>
+            )}
           </div>
         )}
-
-        {onDelete && (
-          <button
-            onClick={() => onDelete?.(offer.id)}
-            className="px-3 py-1 border border-red-300 rounded-md text-sm text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          >
-            Eliminar
-          </button>
-        )}
       </div>
-      <div className=" ml-4 md:justify-start mb-4 mt-4 flex gap-2">
+      <div className="ml-4 md:justify-start mb-4 mt-4 flex gap-2">
         {onAddCategory && (
           <button
             onClick={() => onAddCategory(offer)}

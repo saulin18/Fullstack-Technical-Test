@@ -32,14 +32,23 @@ export default function OfferDetailPage() {
       <h4 className="text-2xl font-bold mt-5 text-gray-900 mb-4">
         Ofertas similares
       </h4>
-      <div className="grid grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {recommendedOffers?.map((offer, index) => (
-          <div className="mt-6" key={offer.id}>
-            Oferta recomendada {index + 1}
-            <OfferCard key={offer.id} offer={offer} isDetail />
-          </div>
-        ))}
-      </div>
+      {recommendedOffers?.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">
+            No se encontraron ofertas similares a esta.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recommendedOffers?.map((offer, index) => (
+            <div className="mt-6" key={offer.id}>
+              Oferta recomendada {index + 1}
+              <OfferCard key={offer.id} offer={offer} isDetail />
+            </div>
+          ))}
+        </div>
+      )}
+
 
       <div className="mt-8 flex justify-center">
         <button

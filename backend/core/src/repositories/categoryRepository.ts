@@ -13,12 +13,12 @@ export class CategoryRepository {
     });
   }
 
-  async delete(id: number): Promise<Category> {
-    return this.prisma.category.delete({
-      where: { id },
-    });
-  }
-
+ 
+async delete(id: number): Promise<Category> {
+  return this.prisma.category.delete({
+    where: { id },
+  });
+}
   async addToOffer(categoryId: number, offerId: number): Promise<Offer> {
     return this.prisma.offer.update({
       where: { id: offerId },
