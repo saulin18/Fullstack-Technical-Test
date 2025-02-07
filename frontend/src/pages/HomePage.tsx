@@ -3,7 +3,7 @@ import { OfferCard } from "../components/offers/OfferCard";
 import { useGetOffers } from "../hooks/offers";
 import { useCategories } from "../hooks/categories";
 import useCategoriesStore from "../stores/categoriesStore";
-import AdminDashboardButton from "../components/DashboardButton";
+import AdminDashboardButton from "../components/dashboard/DashboardButton";
 import { Link, Navigate } from "react-router-dom";
 import Skeleton from "../components/Skeleton";
 import useAuthStore from "../stores/authStore";
