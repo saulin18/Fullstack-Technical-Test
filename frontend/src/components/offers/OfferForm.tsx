@@ -96,7 +96,7 @@ export const OfferForm = ({
                   min="0"
                   max="100"
                   step="1"
-                  defaultValue={offer?.discount || 0}
+                  defaultValue={offer?.discount ? offer?.discount : 0}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
           </div><button
               type="submit"

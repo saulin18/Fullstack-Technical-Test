@@ -22,7 +22,7 @@ interface JwtPayload {
 
 const generateTokens = (user: JwtPayload) => {
   return {
-    accessToken: jwt.sign(user, ACCESS_SECRET, { expiresIn: "15m" }),
+    accessToken: jwt.sign(user, ACCESS_SECRET, { expiresIn: "45m" }),
     refreshToken: jwt.sign({ id: user.id }, REFRESH_SECRET, {
       expiresIn: "7d",
     }),

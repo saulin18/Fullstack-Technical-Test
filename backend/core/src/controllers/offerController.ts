@@ -1,10 +1,9 @@
 import { Response, RequestHandler } from "express";
 import { OfferService } from "../services/offerService";
 import { ParamsDictionary } from "express-serve-static-core";
+import { PrismaClient } from "@prisma/client";
 
-interface CategoryParams extends ParamsDictionary {
-  id: string;
-}
+const prisma = new PrismaClient();
 
 export class OfferController {
   private offerService: OfferService;
@@ -18,7 +17,10 @@ export class OfferController {
   }
 
   private handleError(res: Response, status: number, message: string): void {
-    this.sendResponse(res, status, { error: message });
+    this.sendResponse(res, status, { 
+      message: message,
+      success: false 
+    });
   }
 
   getOffers: RequestHandler = async (req, res, next) => {
@@ -39,18 +41,29 @@ export class OfferController {
       }
 
       const offer = await this.offerService.getById(id);
-      offer ? this.sendResponse(res, 200, offer) : this.handleError(res, 404, "Oferta no encontrada");
+      offer
+        ? this.sendResponse(res, 200, offer)
+        : this.handleError(res, 404, "Oferta no encontrada");
     } catch (error) {
-      this.handleError(res, 500, "Error interno");
+      this.handleError(res, 500, "Error interno del servidor");
     }
   };
 
   createOffer: RequestHandler = async (req, res, next) => {
     try {
+      const existingOffer = await prisma.offer.findFirst({ 
+        where: { title: req.body.title } 
+      });
+      
+      if (existingOffer) {
+        this.handleError(res, 409, "La oferta ya existe");
+        return;
+      }
+
       const newOffer = await this.offerService.create(req.body);
       this.sendResponse(res, 201, newOffer);
     } catch (error) {
-      this.handleError(res, 400, "Error al crear oferta");
+      this.handleError(res, 400, "Error al crear oferta: " + (error instanceof Error ? error.message : ""));
     }
   };
 
@@ -65,7 +78,7 @@ export class OfferController {
       const updatedOffer = await this.offerService.update(id, req.body);
       this.sendResponse(res, 200, updatedOffer);
     } catch (error) {
-      this.handleError(res, 400, "Error al actualizar");
+      this.handleError(res, 400, "Error al actualizar: " + (error instanceof Error ? error.message : ""));
     }
   };
 
@@ -80,27 +93,22 @@ export class OfferController {
       await this.offerService.delete(id);
       res.status(204).send();
     } catch (error) {
-      this.handleError(res, 500, "Error al eliminar");
+      this.handleError(res, 500, "Error al eliminar: " + (error instanceof Error ? error.message : ""));
     }
   };
-
 
   removeCategoryFromOffer: RequestHandler = async (req, res) => {
     try {
       const offerId = parseInt(req.params.id);
-      
       if (isNaN(offerId)) {
-        res.status(400).json({ error: "ID de oferta inválido" });
+        this.handleError(res, 400, "ID de oferta inválido");
         return;
       }
 
       const updatedOffer = await this.offerService.removeCategoryFromOffer(offerId);
-      res.json(updatedOffer);
+      this.sendResponse(res, 200, updatedOffer);
     } catch (error) {
-      console.error("Error removeCategoryFromOffer:", error);
-      res.status(500).json({ error: "Error al remover categoría" });
+      this.handleError(res, 500, "Error al remover categoría: " + (error instanceof Error ? error.message : ""));
     }
   };
-
-
 }

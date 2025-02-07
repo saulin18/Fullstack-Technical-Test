@@ -1,12 +1,12 @@
 import { api, apiWithoutAuth } from "./axiosConfig";
-import { Category } from "../types/types";
+import { Category, CreateCategoryInput } from "../types/types";
 
 export const getCategories = async () => {
   const { data } = await apiWithoutAuth.get<Category[]>("/categories");
   return data;
 };
 
-export const createCategory = async (categoryData: Category) => {
+export const createCategory = async (categoryData: CreateCategoryInput) => {
   const { data } = await api.post<Category>("/categories", categoryData);
   return data;
 };

@@ -37,3 +37,7 @@ export interface Offer {
 
 export type CreateOfferInput = Omit<Offer, "id" | "deleted" | "category" | "user" | "categoryId">;
 export type UpdateOfferInput = Partial<CreateOfferInput>;
+
+export interface CreateCategoryInput {
+  name: string;
+}
