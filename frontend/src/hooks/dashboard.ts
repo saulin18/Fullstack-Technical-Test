@@ -1,10 +1,5 @@
 import useAuthStore from "../stores/authStore";
-import {
-  useGetOffers,
-  useCreateOffer,
-  useUpdateOffer,
-  useDeleteOffer,
-} from "../hooks/offers";
+import { useGetOffers, useCreateOffer, useUpdateOffer } from "../hooks/offers";
 
 import { Offer } from "../types/types";
 import {
@@ -14,12 +9,14 @@ import {
 import { useState } from "react";
 import { useCategories } from "../hooks/categories";
 
+
+
 export const useOfferActions = () => {
   const { user } = useAuthStore();
   const { data: offers } = useGetOffers();
   const createMutation = useCreateOffer();
   const updateMutation = useUpdateOffer();
-  const deleteMutation = useDeleteOffer();
+
 
   const handleCreate = async (formData: FormData) => {
     try {
@@ -70,21 +67,15 @@ export const useOfferActions = () => {
     }
   };
 
-  const handleDelete = async (id: any) => {
-    try {
-      await deleteMutation.mutateAsync(id);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  };
+
 
   return {
-    offers: Array.isArray(offers) && offers?.filter((offer) => offer.deleted === false) || [],
+    offers:
+      (Array.isArray(offers) &&
+        offers?.filter((offer) => offer.deleted === false)) ||
+      [],
     handleCreate,
     handleUpdate,
-    handleDelete,
   };
 };
 
@@ -138,7 +129,7 @@ export const useDashboard = () => {
   >(null);
 
   const { data: categories } = useCategories();
-  const { offers, handleCreate, handleUpdate, handleDelete } =
+  const { offers, handleCreate, handleUpdate } =
     useOfferActions();
   const { handleAddCategory, handleRemoveCategory } =
     useCategoryActions(selectedOffer);
@@ -155,7 +146,6 @@ export const useDashboard = () => {
       setModalType,
       handleCreate,
       handleUpdate,
-      handleDelete,
       handleAddCategory,
       handleRemoveCategory,
     },

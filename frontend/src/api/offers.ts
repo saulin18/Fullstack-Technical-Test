@@ -38,7 +38,7 @@ export const updateOffer = async ({
   return data;
 };
 
-export const deleteOffer = async (id?: number) => {
+export const deleteOffer = async (id: number) => {
   await api.patch(`/offers/${id}`);
 };
 

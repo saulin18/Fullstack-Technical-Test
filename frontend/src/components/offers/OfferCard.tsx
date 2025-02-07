@@ -52,15 +52,15 @@ export function OfferCard({
             {hasValidDiscount ? (
               <>
                 <span className="block text-sm text-gray-500 line-through">
-                  ${offer.price.toFixed(2)}
+                  ${offer.price}
                 </span>
                 <span className="text-lg font-bold text-gray-900">
-                  ${discountedPrice.toFixed(2)}
+                  ${discountedPrice}
                 </span>
               </>
             ) : (
               <span className="text-lg font-bold text-gray-900">
-                ${offer.price.toFixed(2)}
+                ${offer.price}
               </span>
             )}
             {offer.discount === 100 && (
