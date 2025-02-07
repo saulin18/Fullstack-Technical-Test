@@ -23,7 +23,9 @@ export default function LoginPage() {
       loginSchema.parse(credentials);
       setErrors({});
       
+
       await mutateAsync({ username: credentials.username, password: credentials.password });
+
       
     } catch (error) {
       if (error instanceof z.ZodError) {
