@@ -1,12 +1,12 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import categoryRouter from "./routers/categoryRouter";
 import offerRouter from "./routers/offerRouter";
 import authRouter from "./routers/authRouter";
 import cookieParser from "cookie-parser";
+import { loadEnvFile } from "process";
 
-dotenv.config();
+loadEnvFile(process.cwd() + "/.env");
 
 const app = express();
 const port = 3000;
@@ -17,11 +17,9 @@ const allowedOrigins = process.env.FRONTEND_ORIGINS
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: true,
     credentials: true,
-
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     
   })
