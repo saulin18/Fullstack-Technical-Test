@@ -1,8 +1,11 @@
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { loadEnvFile } from 'process';
 
 const prisma = new PrismaClient();
+
+loadEnvFile(process.cwd() + '/.env');
 
 const SALT_ROUNDS = 10;
 
