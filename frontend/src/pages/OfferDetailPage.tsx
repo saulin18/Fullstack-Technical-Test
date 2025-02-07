@@ -1,13 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useGetOfferById, useGetOffers } from "../hooks/offers";
 import { OfferCard } from "../components/offers/OfferCard";
+import { Offer } from "../types/types";
 
 export default function OfferDetailPage() {
   const { id } = useParams();
-  const { data: MyOffer } = useGetOfferById(parseInt(id as string));
+  const { data: MyOffer } = useGetOfferById(parseInt(id as string)) as any;
   const { data: offers } = useGetOffers();
 
-  const recommendedOffers = offers?.filter((offer) => {
+
+  const recommendedOffers = Array.isArray(offers) && offers?.filter((offer: Offer) => {
     return (
       offer.category?.name === MyOffer?.category?.name &&
       offer.id !== MyOffer?.id &&
@@ -32,7 +34,7 @@ export default function OfferDetailPage() {
       <h4 className="text-2xl font-bold mt-5 text-gray-900 mb-4">
         Ofertas similares
       </h4>
-      {recommendedOffers?.length === 0 ? (
+      { Array.isArray(recommendedOffers) && recommendedOffers?.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">
             No se encontraron ofertas similares a esta.
@@ -40,7 +42,7 @@ export default function OfferDetailPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recommendedOffers?.map((offer, index) => (
+          {Array.isArray(recommendedOffers) && recommendedOffers?.map((offer: Offer, index: number) => (
             <div className="mt-6" key={offer.id}>
               Oferta recomendada {index + 1}
               <OfferCard key={offer.id} offer={offer} isDetail />

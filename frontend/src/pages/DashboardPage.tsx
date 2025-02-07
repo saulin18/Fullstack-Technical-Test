@@ -12,6 +12,8 @@ import { DashboardHeader } from "../components/dashboard/DashboardHeader";
 import { Offer } from "../types/types";
 import { useAuth } from "../hooks/auth";
 import { Link } from "react-router-dom";
+import { useDeleteOffer } from "../hooks/offers";
+
 
 export default function DashboardPage() {
   const {
@@ -21,13 +23,19 @@ export default function DashboardPage() {
       setModalType,
       handleCreate,
       handleUpdate,
-      handleDelete,
       handleAddCategory,
       handleRemoveCategory,
     },
   } = useDashboard();
 
   const { data: user } = useAuth();
+   const deleteMutation = useDeleteOffer();
+
+  const handleDelete = async (id: any) => {
+   
+     await deleteMutation.mutateAsync(id);
+     return true;
+  };
 
   if (!user) {
     return (
