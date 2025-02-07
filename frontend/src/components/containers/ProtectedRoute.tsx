@@ -1,18 +1,26 @@
-import { useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { User } from '../../types/types';
+import { useEffect } from "react";
 
-export const ProtectedRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
-  const queryClient = useQueryClient();
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../hooks/auth";
+
+export const ProtectedRoute = ({
+  children,
+  roles,
+}: {
+  children: JSX.Element;
+  roles: string[];
+}) => {
+
+
+  const { data: user } = useAuth();
   const navigate = useNavigate();
-  const user = queryClient.getQueryData<User>(['user']);
 
   useEffect(() => {
     if (!user) {
-      navigate('/auth/login');
+      navigate("/auth/login");
     } else if (roles && !roles.includes(user.role)) {
-      navigate('/');
+      navigate("/");
     }
   }, [user, roles, navigate]);
 

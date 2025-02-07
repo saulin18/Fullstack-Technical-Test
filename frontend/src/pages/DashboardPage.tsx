@@ -10,6 +10,7 @@ import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModa
 import { useDashboard } from "../hooks/dashboard";
 import { DashboardHeader } from "../components/dashboard/DashboardHeader";
 import { Offer } from "../types/types";
+import { useAuth } from "../hooks/auth";
 
 export default function DashboardPage() {
   const {
@@ -24,6 +25,12 @@ export default function DashboardPage() {
       handleRemoveCategory,
     },
   } = useDashboard();
+
+  const { data: user } = useAuth();
+
+  if (!user) {
+    return <div>No tienes permisos para ver el dashboard</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">

@@ -19,13 +19,16 @@ app.use(
   cors({
     origin: allowedOrigins,
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
+
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     
   })
 );
 
 app.use(cookieParser());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter);

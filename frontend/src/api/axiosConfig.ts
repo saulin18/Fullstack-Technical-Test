@@ -4,11 +4,19 @@ import useAuthStore from "../stores/authStore";
 
 export const apiWithoutAuth = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:3000",
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:3000",
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 api.interceptors.request.use((config) => {
