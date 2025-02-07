@@ -15,7 +15,7 @@ const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const OfferDetailPage = lazy(() => import("./pages/OfferDetailPage"));
 import AuthLoader from "./components/containers/AuthLoader";
 import Loader from "./components/Loader";
-import { ProtectedRoute } from "./components/containers/ProtectedRoute";
+
 
 const router = createBrowserRouter([
   {
@@ -50,11 +50,7 @@ const router = createBrowserRouter([
 
     element: (
       <Suspense fallback={<Loader />}>
-        <ProtectedRoute roles={["admin"]}>
-          <AuthLoader>
-            <DashboardPage />,
-          </AuthLoader>
-        </ProtectedRoute>
+        <DashboardPage />,
       </Suspense>
     ),
   },

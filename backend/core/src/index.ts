@@ -11,18 +11,22 @@ dotenv.config();
 const app = express();
 const port = 3000;
 
-const corsOptions = {
-  origin: process.env.FRONTEND_ORIGINS,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+const allowedOrigins = process.env.FRONTEND_ORIGINS
+  ? process.env.FRONTEND_ORIGINS.split(",").map((origin) => origin.trim())
+  : ["http://localhost:5173"]; // Valor por defecto para desarrollo
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    
+  })
+);
 
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter);
