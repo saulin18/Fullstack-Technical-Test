@@ -69,7 +69,7 @@ export const useDeleteOffer = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteOffer,
+    mutationFn: deleteOffer(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["offers"] });
       toast.success("Oferta eliminada correctamente");

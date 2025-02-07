@@ -7,6 +7,7 @@ import AdminDashboardButton from "../components/dashboard/DashboardButton";
 import { Link, Navigate } from "react-router-dom";
 import Skeleton from "../components/Skeleton";
 import useAuthStore from "../stores/authStore";
+import { Offer } from "../types/types";
 
 export default function HomePage() {
   const { data: offers, isLoading, isError } = useGetOffers();
@@ -23,9 +24,9 @@ export default function HomePage() {
 
   const { user } = useAuthStore();
 
-    if (!user) {
-      return <Navigate to="/auth/login" />;
-    }
+  if (!user) {
+    return <Navigate to="/auth/login" />;
+  }
 
   useEffect(() => {
     if (categoriesData) {
@@ -36,16 +37,15 @@ export default function HomePage() {
   const filteredOffers =
     selectedCategory === "all"
       ? offers || []
-      : offers?.filter((offer) => offer.category?.name === selectedCategory) ||
+      : (Array.isArray(offers) &&
+          offers?.filter(
+            (offer: Offer) => offer.category?.name === selectedCategory
+          )) ||
         [];
 
-  const offersWithoutDuplicates = filteredOffers?.filter(
-    (offer, index, self) => self.findIndex((o) => o.id === offer.id) === index
-  );
-
-  const offersToShow = offersWithoutDuplicates?.filter(
-    (offer) => offer.deleted === false
-  );
+  const offersToShow =
+    Array.isArray(filteredOffers) &&
+    filteredOffers?.filter((offer: Offer) => offer.deleted === false);
 
   if (isLoading) {
     return <Skeleton />;
@@ -97,7 +97,7 @@ export default function HomePage() {
             Iniciar Sesión
           </Link>{" "}
         </div>
-        {offersToShow.length === 0 ? (
+        {Array.isArray(offersToShow) && offersToShow.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
               No se encontraron ofertas en esta categoría.
@@ -105,11 +105,16 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {offersToShow?.map((offer) => (
-              <Link key={offer.id} to={`/offers/${offer.id}`} className="block">
-                <OfferCard key={offer.id} offer={offer} />
-              </Link>
-            ))}
+            {Array.isArray(offersToShow) &&
+              offersToShow?.map((offer: Offer) => (
+                <Link
+                  key={offer.id}
+                  to={`/offers/${offer.id}`}
+                  className="block"
+                >
+                  <OfferCard key={offer.id} offer={offer} />
+                </Link>
+              ))}
           </div>
         )}
       </div>

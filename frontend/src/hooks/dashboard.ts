@@ -39,7 +39,7 @@ export const useOfferActions = () => {
         userId: user.id,
       };
 
-      await createMutation.mutateAsync(newOffer);
+      await createMutation.mutateAsync(newOffer as any);
       return true;
     } catch (error) {
       console.error(error);
@@ -62,7 +62,7 @@ export const useOfferActions = () => {
           : null,
       };
 
-      await updateMutation.mutateAsync({ id, offerData: updatedOffer });
+      await updateMutation.mutateAsync({ id, offerData: updatedOffer } as any);
       return true;
     } catch (error) {
       console.error(error);
@@ -70,7 +70,7 @@ export const useOfferActions = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: any) => {
     try {
       await deleteMutation.mutateAsync(id);
       return true;
@@ -81,7 +81,7 @@ export const useOfferActions = () => {
   };
 
   return {
-    offers: offers?.filter((offer) => offer.deleted === false) || [],
+    offers: Array.isArray(offers) && offers?.filter((offer) => offer.deleted === false) || [],
     handleCreate,
     handleUpdate,
     handleDelete,
